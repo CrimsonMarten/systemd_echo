@@ -11,11 +11,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         print(request_path)
         print(self.request_version)
         print(self.headers)
+        print(self.client_address)
         print('\n<----- Request End -----\n')
-
-        response = 'Response to %s:%s' % (self.client_address[0], self.client_address[1])
-        
-        print('Responded with: %s' % response)
+        response = '(Response to %s)' % self.client_address[0]
+        self.send_response(200, response)
         
     def do_POST(self):
 
@@ -28,8 +27,9 @@ class RequestHandler(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('Content-Length'))
         post_body = self.rfile.read(content_len)
         print(post_body)
+        response = '%s\n(Response to %s)' % (post_body, self.client_address[0])
         print('\n<----- Request End -----\n')
-        self.send_response(200)
+        self.send_response(200, response)
 
 def main():
     port = 5053
